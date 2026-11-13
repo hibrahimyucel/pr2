@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>pr2 Dev Proxy - Merkezi Test Gateway</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 2rem; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; max-width: 550px; }
+        .badge { background: #238636; color: #fff; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; }
+        a { color: #58a6ff; text-decoration: none; display: block; margin: 0.5rem 0; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🚀 Merkezi wwwroot Bağlantı Testi</h2>
+        <p><strong>Aktif Sunucu:</strong> <span class="badge"><!--# echo var="subdomain_name" default="Tanımsız" --></span></p>
+        <p><strong>İstenen Host:</strong> <!--# echo var="http_host" --></p>
+        <hr style="border-color: #30363d; margin: 1rem 0;">
+        <p>Test Uç Noktaları:</p>
+        <a href="https://localhost/events">➔ /events Alt Klasör Testi</a>
+        <a href="https://docs.localhost">➔ docs.localhost (Subdomain Testi)</a>
+        <a href="https://dashboard.localhost">➔ dashboard.localhost (Subdomain Testi)</a>
+    </div>
+</body>
+</html>
+

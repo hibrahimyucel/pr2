@@ -1,0 +1,25 @@
+name: pr2_dev_proxy
+services:
+  nginx_proxy:
+    image: nginx:alpine
+    container_name: pr2_dev_proxy
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ../../../wwwroot:/var/www/html:ro
+    
+    networks:
+      - pr2_dev_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'        # Maksimum kullanabileceği CPU çekirdek sayısı
+          memory: 512M       # Maksimum kullanabileceği RAM miktarı
+
+networks:
+  pr2_dev_network:
+    external: true
