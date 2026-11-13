@@ -1,0 +1,32 @@
+name: pr2_dev_gitea
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: pr2_dev_gitea
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__server__DOMAIN=git.localhost
+      - GITEA__server__SSH_DOMAIN=git.localhost
+      - GITEA__server__ROOT_URL=https://git.localhost
+      - GITEA__server__SSH_PORT=2222
+    volumes:
+      - ../../../gitea-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "2222:22" # Host SSH (22) portuyla çakışmayı önler
+    networks:
+      - pr2_dev_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+networks:
+  pr2_dev_network:
+    external: true
+
