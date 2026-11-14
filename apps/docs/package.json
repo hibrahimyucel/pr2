@@ -1,0 +1,26 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev src --host 0.0.0.0 --port 5174",
+    "build": "vitepress build src",
+    "docker:up": "docker compose up -d",
+    "docker:build": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:publish": "docker compose -f docker-compose.build.yml run --rm --build docs-builder",
+    "docker:prod:up": "docker compose -f docker-compose.prod.yml up -d --build",
+    "docker:prod:down": "docker compose -f docker-compose.prod.yml down",
+    "docker:prod:export": "docker compose -f docker-compose.prod.yml build && docker save pr2-docs:latest | gzip > ../../../pr2-docs-latest.tar.gz",
+    "docker:prod:import": "docker load -i ../../../pr2-docs-latest.tar.gz && docker compose -f docker-compose.prod.yml up -d --no-build"
+
+
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.45"
+  }
+}

@@ -1,0 +1,20 @@
+FROM node:20-alpine
+WORKDIR /app
+
+# VitePress git geçmişi (son güncelleme tarihi vb.) için git gereklidir
+RUN apk add --no-cache git
+RUN npm i -g pnpm turbo
+
+# Bağımlılıkları kur
+COPY ./package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+COPY ./apps/docs/package.json ./apps/docs/
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
+
+# Monorepo kaynak kodlarını içeri al
+COPY --chown=1000:1000 . .
+RUN mkdir -p /wwwroot && chown -R 1000:1000 /wwwroot
+
+# Alt yol (/docs/) ile derle ve çıktıyı bağlı olan /output dizinine temizleyerek aktar
+CMD ["sh", "-c", "VITE_BASE_URL=/docs/ pnpm --filter docs build && mkdir -p /wwwroot/docs && rm -rf /wwwroot/docs/* && cp -rv /app/apps/docs/src/.vitepress/dist/* /wwwroot/docs/ && ls -la /wwwroot/docs"]
+
+

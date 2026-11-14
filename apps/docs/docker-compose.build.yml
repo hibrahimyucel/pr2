@@ -1,0 +1,17 @@
+name: docs_builder
+services:
+  docs-builder:
+    user: "${UID:-1000}:${GID:-1000}"
+    build:
+      context: ../../
+      dockerfile: apps/docs/Dockerfile.build
+    container_name: docs_builder
+    volumes:
+      # İşletim sisteminden bağımsız olarak workspace-pr2/wwwroot/docs yolunu bağlar
+      - ../../../wwwroot:/wwwroot:Z
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+

@@ -1,0 +1,29 @@
+# 1. Aşama: Builder
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+RUN apk add --no-cache git
+RUN npm i -g pnpm turbo
+
+COPY ./package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+COPY ./apps/docs/package.json ./apps/docs/
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
+
+COPY . .
+
+# Alt alan adı (docs.localhost) kök dizinden çalıştığı için VITE_BASE_URL=/ verilir
+ENV VITE_BASE_URL=/
+RUN pnpm --filter docs build
+
+# 2. Aşama: Production Web Sunucu
+FROM nginx:alpine
+
+# Konteyner içi Nginx yapılandırması
+COPY ./apps/docs/nginx.prod.conf /etc/nginx/conf.d/default.conf
+
+# Derlenen statik dosyaları konteyner içine göm
+COPY --from=builder /app/apps/docs/src/.vitepress/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+

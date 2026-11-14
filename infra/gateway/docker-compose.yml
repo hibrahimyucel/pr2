@@ -3,6 +3,7 @@ services:
   nginx_proxy:
     image: nginx:alpine
     container_name: pr2_dev_proxy
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"

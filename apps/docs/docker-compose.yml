@@ -1,0 +1,27 @@
+name: docs_dev
+services:
+  docs-dev:
+    user: "${UID:-1000}:${GID:-1000}"
+    build:
+      context: ../../                      # Reaches up to the monorepo root to fetch workspace lockfiles
+      dockerfile: apps/docs/Dockerfile.dev # Exact path relative to the context root
+    container_name: docs_dev
+    volumes:
+      # Reaches up to the root to mount the workspace code into the app
+      - ../../:/app
+      - /app/node_modules
+      - /app/apps/docs/node_modules
+    environment:
+      - WATCHPACK_POLLING=true
+      - VITE_BASE_URL=/docs/
+    networks:
+      - pr2_dev_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'        # Maksimum kullanabileceği CPU çekirdek sayısı
+          memory: 512M       # Maksimum kullanabileceği RAM miktarı
+
+networks:
+  pr2_dev_network:
+    external: true

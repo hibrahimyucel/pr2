@@ -1,0 +1,18 @@
+name: docs_prod
+services:
+  docs-prod:
+    image: pr2-docs:latest
+    container_name: docs_prod
+    restart: unless-stopped
+    networks:
+      - pr2_dev_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+
+networks:
+  pr2_dev_network:
+    external: true
+

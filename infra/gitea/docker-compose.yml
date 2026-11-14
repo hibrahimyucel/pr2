@@ -11,7 +11,7 @@ services:
       - GITEA__server__DOMAIN=git.localhost
       - GITEA__server__SSH_DOMAIN=git.localhost
       - GITEA__server__ROOT_URL=https://git.localhost
-      - GITEA__server__SSH_PORT=2222
+      - GITEA__server__DISABLE_SSH=true
     volumes:
       - ../../../gitea-data:/data
       - /etc/timezone:/etc/timezone:ro
